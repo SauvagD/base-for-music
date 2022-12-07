@@ -5,8 +5,8 @@ const db = new sqlite3.Database(':memory:');
 const fs = require('fs');
 const cors = require('cors')
 
-app.use(cors({origin: 'http://127.0.0.1:5173'}));
 require('dotenv').config();
+app.use(cors({origin: process.env.FRONT_APP_BASEURL}));
 
 // GenderAPI
 const GenderApi = require('gender-api.com-client');
@@ -47,15 +47,15 @@ async function getGender(firstName) {
     } else {
         return "man";
     }
-    return new Promise((resolve, reject) => {
-        try {
-            genderApiClient.getByFirstName(firstName, (res) => {
-                resolve(res)
-            })
-        } catch(err) {
-            reject(err);
-        }
-    });
+    // return new Promise((resolve, reject) => {
+    //     try {
+    //         genderApiClient.getByFirstName(firstName, (res) => {
+    //             resolve(res)
+    //         })
+    //     } catch(err) {
+    //         reject(err);
+    //     }
+    // });
 }
 
 async function RandomFirstName() {

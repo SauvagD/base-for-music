@@ -2,7 +2,6 @@ import { createStyles, Image, UnstyledButton } from '@mantine/core';
 
 const useStyles = createStyles((theme, _params, getRef) => ({
   symbol: {
-    transition: 1,
     backgroundColor: "blue",
     margin: "auto",
     width: '120px', height: '120px', borderRadius: "180px", display: "flex",
