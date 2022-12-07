@@ -16,8 +16,10 @@ app.listen(process.env.PORT, () => {
     console.log("Server listen to " + process.env.PORT);
     db.serialize(() => {
         db.run('CREATE TABLE people (personId INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT NOT NULL)');
+        // Insère une nouvelle personne dans la base
         const addPeople = db.prepare('INSERT INTO people (firstName) VALUES (?)');
 
+        // Récupère les prénoms
         fs.readFile("./names.txt", {encoding: "utf-8"}, (err, data) => {
             if (err) throw err;
             const names = data.toString().split("\n");
@@ -32,6 +34,7 @@ app.listen(process.env.PORT, () => {
     })
 });
 
+// Récupère un record en particulier
 async function getDBRows(query) {
     return new Promise((resolve, reject) => {
         db.each(query, (err, row) => {
@@ -41,25 +44,31 @@ async function getDBRows(query) {
     })
 }
 
+// Récupère le nombre total d'enregistrement de la base de données
+async function getTotalRows() {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM people", [], (err, row) => {
+            if (err) reject(err);
+            resolve(row.length);
+        })
+    })
+}
+
+// Récupère depuis Gender API, les informations sur le gnere du prénom aléatoire
 async function getGender(firstName) {
-    if (firstName === "Amandine") {
-        return "woman"
-    } else {
-        return "man";
-    }
-    // return new Promise((resolve, reject) => {
-    //     try {
-    //         genderApiClient.getByFirstName(firstName, (res) => {
-    //             resolve(res)
-    //         })
-    //     } catch(err) {
-    //         reject(err);
-    //     }
-    // });
+    return new Promise((resolve, reject) => {
+        try {
+            genderApiClient.getByFirstName(firstName, (res) => {
+                resolve(res.gender)
+            })
+        } catch(err) {
+            reject(err);
+        }
+    });
 }
 
 async function RandomFirstName() {
-    let max = 2 //400;
+    let max = await getTotalRows();
     let randomNumber =  Math.floor(Math.random() * (max)) + 1;
     let firstNamePromise = await getDBRows('SELECT firstName FROM people WHERE personId = ' + randomNumber);
     return firstNamePromise.firstName;
