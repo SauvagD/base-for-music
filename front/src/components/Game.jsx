@@ -3,7 +3,6 @@ import PendingScreen from './Status/PendingScreen'
 import ModalScreen from './Status/ModalScreen';
 import Score from './Score';
 import { useGameContext } from '../providers/GameProvider';
-import { useChangeScoreColor } from '../store/game';
 
 const useStyles = createStyles((theme, _params, getRef) => ({
   coreGame: {
@@ -12,14 +11,13 @@ const useStyles = createStyles((theme, _params, getRef) => ({
 }));
 
 export default function Game() {
-    const { gameStatus, points } = useGameContext();
-    const [color] = useChangeScoreColor(points);
+    const { gameStatus, points, scoreColor } = useGameContext();
     const { classes } = useStyles();
 
     return (
         <Container>
             <div className={classes.coreGame}>
-                <Score points={points} color={color} />
+                <Score points={points} color={scoreColor} />
                 <div style={{ width: "100%", height: "100%"}}>
                     {gameStatus === "Pending" 
                     ? 

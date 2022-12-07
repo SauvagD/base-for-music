@@ -14,7 +14,7 @@ export function Home({ startGame }) {
                     <Text fw={1000} sx={{fontSize: 40}}>
                         Welcome to the Gender Game !
                     </Text>
-                    <Flex direction={"column"} style={{}}>
+                    <Flex direction={"column"}>
                         <Text>The goal is to guess the gender of the name that will appear on the screen</Text>
                         <Text style={{margin:'auto'}}>Good Luck !</Text>
                     </Flex>
